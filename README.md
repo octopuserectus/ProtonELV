@@ -1,6 +1,8 @@
 # qulauncher
 A companion tool for XorTroll's uLaunch https://github.com/XorTroll/uLaunch
 
-At the moment it can easily swap qlaunch with uLaunch and reboot to payload. 
+At the moment it can swap qlaunch with uLaunch and reboot to payload. 
 
-At the moment it's just a simple mod for https://github.com/Atmosphere-NX/Atmosphere/tree/master/troposphere/reboot_to_payload I wrote while learning C.
+Planned features: online install, nigthly builds. 
+
+It began as a mod for https://github.com/Atmosphere-NX/Atmosphere/tree/master/troposphere/reboot_to_payload I wrote while learning C.
