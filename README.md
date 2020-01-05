@@ -1,4 +1,6 @@
-# qulauncher
+# ProtonELV
+(with an emphasis on *expendable*)
+
 A companion tool for XorTroll's uLaunch https://github.com/XorTroll/uLaunch
 
 At the moment it can swap qlaunch with uLaunch and reboot to payload. 
