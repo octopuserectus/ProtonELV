@@ -1,9 +1,9 @@
 # ProtonELV
 (with an emphasis on *expendable*)
 
-A companion tool for XorTroll's uLaunch https://github.com/XorTroll/uLaunch
+A companion homebrew for https://github.com/XorTroll/uLaunch
 
-At the moment it can swap qlaunch with uLaunch and reboot to payload. 
+At the moment it can swap qlaunch with uLaunch and reboot to payload backing up everything useful you might have in the process. 
 
 Planned features: online install, nigthly builds. 
 
