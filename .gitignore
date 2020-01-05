@@ -1,0 +1,8 @@
+
+build/main.d
+build/main.o
+build/ProtonELV.lst
+build/ProtonELV.map
+ProtonELV.elf
+ProtonELV.nacp
+ProtonELV.nro

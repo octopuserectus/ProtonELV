@@ -42,9 +42,9 @@ BUILD		:=	build
 SOURCES		:=	source
 DATA		:=	data
 INCLUDES	:=	include
-APP_TITLE	:=	qulauncher
+APP_TITLE	:=	ProtonELV
 APP_AUTHOR	:=	octopus
-APP_VERSION	:=	0.0.1
+APP_VERSION	:=	0.1
 #ROMFS	:=	romfs
 
 #---------------------------------------------------------------------------------

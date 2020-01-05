@@ -56,27 +56,71 @@ static void reboot_to_payload(void) {
 
 void swap_qmenu_ulaunch(void) {    
 
-    unsigned char file_u[] = "/atmosphere/titles/0100000000001000ulaunch/exefs.nsp";
-    unsigned char file_q[] = "/atmosphere/titles/0100000000001000/exefs.nsp";
+//    unsigned char file_qlaunch[] = "/atmosphere/contents/0100000000001000/exefs.nsp";
+//    unsigned char file_ShopN[] = "/atmosphere/contents/010000000000100B/exefs.nsp";
+//    unsigned char file_LibraryAppletAuth[] = "/atmosphere/contents/0100000000001001/exefs.nsp";
+//    unsigned char file_flog[] = "/atmosphere/contents/01008BB00013C000/exefs.nsp";
+    unsigned char file_1000[] = "/ulaunch/ProtonELV/0100000000001000/exefs.nsp";
+//   unsigned char file_100B[] = "/ulaunch/ProtonELV/010000000000100B/exefs.nsp";
+//   unsigned char file_1001[] = "/ulaunch/ProtonELV/0100000000001001/exefs.nsp";
+    unsigned char file_C000_bak[] = "/ulaunch/ProtonELV/backup/01008BB00013C000/exefs.nsp";
+    unsigned char file_C000_cont[] = "/atmosphere/contents/01008BB00013C000/exefs.nsp";
    
-    int lState = 0;
-    
-    if (!access((const char *)file_u, F_OK)) {
-        lState = 1; // all good, ulaunch inactive
-    } else if (!access((const char *)file_q, F_OK)) {
-        lState = 3; // ulaunch active
+    int lState = 0;  
+  
+    if (!access((const char *)file_1000, F_OK)) {
+        lState = 1; // first start 
+    } else if ((!access((const char *)file_C000_cont, F_OK)) || (!access((const char *)file_C000_bak, F_OK))) {
+        lState = 3; // can swap
     } else {
         lState = 2; // error no uLaunch  
     }
     
     switch (lState) {
+        case 1:
+            printf("Ready for liftoff!\nHere's to successful (u)launch! Poyekhali!\nReboot to payload now.\n");
+            mkdir("/ulaunch/ProtonELV/backup", 0700);
+            rename("/atmosphere/contents/0100000000001000/", "/ulaunch/ProtonELV/backup/0100000000001000/");
+            rename("/atmosphere/contents/010000000000100B/", "/ulaunch/ProtonELV/backup/010000000000100B/");
+            rename("/atmosphere/contents/0100000000001001/", "/ulaunch/ProtonELV/backup/0100000000001001/");
+            rename("/atmosphere/contents/01008BB00013C000/", "/ulaunch/ProtonELV/backup/01008BB00013C000/");
+            rename("/ulaunch/ProtonELV/0100000000001000/", "/atmosphere/contents/0100000000001000/");
+            rename("/ulaunch/ProtonELV/010000000000100B/", "/atmosphere/contents/010000000000100B/");
+            rename("/ulaunch/ProtonELV/0100000000001001/", "/atmosphere/contents/0100000000001001/");
+            rename("/ulaunch/ProtonELV/01008BB00013C000/", "/atmosphere/contents/01008BB00013C000/");
+            break;
+                
+        case 2:
+            printf("China won the space race...\nFile [%s] access failed: %d\nThe only thing left is to pray.\n", file_1000, errno);
+            break; 
+
+        case 3: 
+            printf("Swapped.\nReboot to payload for the changes to apply.\n\n");
+            rename("/atmosphere/contents/0100000000001000/", "/ulaunch/ProtonELV/0100000000001000temp/");
+            rename("/ulaunch/ProtonELV/backup/0100000000001000/", "/atmosphere/contents/0100000000001000/");
+            rename("/ulaunch/ProtonELV/0100000000001000temp/", "/ulaunch/ProtonELV/backup/0100000000001000/");
+
+            rename("/atmosphere/contents/010000000000100B/", "/ulaunch/ProtonELV/010000000000100Btemp/");
+            rename("/ulaunch/ProtonELV/backup/010000000000100B/", "/atmosphere/contents/010000000000100B/");
+            rename("/ulaunch/ProtonELV/010000000000100Btemp/", "/ulaunch/ProtonELV/backup/010000000000100B/");
+
+            rename("/atmosphere/contents/0100000000001001/", "/ulaunch/ProtonELV/0100000000001001temp/");
+            rename("/ulaunch/ProtonELV/backup/0100000000001001/", "/atmosphere/contents/0100000000001001/");
+            rename("/ulaunch/ProtonELV/0100000000001001temp/", "/ulaunch/ProtonELV/backup/0100000000001001/");
+
+            rename("/atmosphere/contents/01008BB00013C000/", "/ulaunch/ProtonELV/01008BB00013C000temp/");
+            rename("/ulaunch/ProtonELV/backup/01008BB00013C000/", "/atmosphere/contents/01008BB00013C000/");
+            rename("/ulaunch/ProtonELV/01008BB00013C000temp/", "/ulaunch/ProtonELV/backup/01008BB00013C000/");
+            break;
+    }
+/*    switch (lState) {
         case 1: 
             printf("qlaunch is active, swapped with uLaunch.\n\n");
-            if (!rename("/atmosphere/titles/0100000000001000/", "/atmosphere/titles/0100000000001000qlaunch/")) {
-                rename("/atmosphere/titles/0100000000001000ulaunch/", "/atmosphere/titles/0100000000001000/");             
+            if (!rename("/atmosphere/contents/0100000000001000/", "/atmosphere/contents/0100000000001000qlaunch/")) {
+                rename("/atmosphere/contents/0100000000001000ulaunch/", "/atmosphere/contents/0100000000001000/");             
             } else {
-                mkdir("/atmosphere/titles/0100000000001000qlaunch/", 0700);
-                rename("/atmosphere/titles/0100000000001000ulaunch/", "/atmosphere/titles/0100000000001000/");
+                mkdir("/atmosphere/contents/0100000000001000qlaunch/", 0700);
+                rename("/atmosphere/contents/0100000000001000ulaunch/", "/atmosphere/contents/0100000000001000/");
             }
             break;
         case 2: 
@@ -84,16 +128,16 @@ void swap_qmenu_ulaunch(void) {
             break;
         case 3:
             printf("uLaunch is active, swapped with qlaunch.\n\n");
-            rename("/atmosphere/titles/0100000000001000/", "/atmosphere/titles/0100000000001000ulaunch/");
-            rename("/atmosphere/titles/0100000000001000qlaunch/", "/atmosphere/titles/0100000000001000/");
+            rename("/atmosphere/contents/0100000000001000/", "/atmosphere/contents/0100000000001000ulaunch/");
+            rename("/atmosphere/contents/0100000000001000qlaunch/", "/atmosphere/contents/0100000000001000/");
             break;
-    }   
+    } */   
 }   
  
 int main(int argc, char **argv)
 {
     consoleInit(NULL);
-    printf("Place 'SdOut/titles/010100000000001000/exefs.nsp' into\n'/atmosphere/titles/0100000000001000ulaunch/'\nThe three remaining folders from '/SdOut/titles' should go into \n'/atmosphere/titles' for this app to work.\n\nReboot to payload to apply changes\n\nPress [X] to swap qlaunch with uLaunch\n");
+    printf("First setup/update:\nplace four folders from release: '/atmosphere/contents'\ninto '/ulaunch/ProtonELV' (create).\n\nPress [X] to swap qlaunch with uLaunch\n");
     
 bool can_reboot = true;
     Result rc = splInitialize();
