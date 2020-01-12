@@ -44,7 +44,7 @@ DATA		:=	data
 INCLUDES	:=	include
 APP_TITLE	:=	ProtonELV
 APP_AUTHOR	:=	octopus
-APP_VERSION	:=	0.1
+APP_VERSION	:=	1.0
 #ROMFS	:=	romfs
 
 #---------------------------------------------------------------------------------
